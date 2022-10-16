@@ -2,7 +2,6 @@ package com.technology.service;
 
 import com.technology.model.User;
 import com.technology.repository.UserRepository;
-
 import java.util.List;
 
 public class UserService {
@@ -22,5 +21,9 @@ public class UserService {
 
     public List<User> findUsers() {
         return userRepository.findUsers();
+    }
+
+    public List<User> filterUsersByQueryParameter(String name, List<User> users) {
+        return userRepository.filterUsersByName(name, users);
     }
 }

@@ -1,0 +1,25 @@
+body{
+    font-family: 'Raleway', sans-serif;
+    background: linear-gradient(to right, #FF4B2B, #FF416C);
+}
+
+h1 {
+    text-align: center;
+    font-size: 48px;
+}
+
+p {
+    text-align: center;
+    font-size: 26px;
+}
+
+.container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.row {
+    margin: 0 auto;
+}

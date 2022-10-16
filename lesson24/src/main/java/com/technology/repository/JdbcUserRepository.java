@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcUserRepository implements UserRepository{
-
     private static final String INSERT_INTO_USERS = "INSERT INTO users(name, password) VALUES (?, ?)";
     private static final String SELECT_FROM_USERS = "SELECT * FROM users";
-    private static final String SELECT_FROM_USERS_WHERE_NAME_PASSWORD = "SELECT * FROM users WHERE name=? AND password=?";
+    private static final String SELECT_FROM_USERS_WHERE_NAME_PASSWORD =
+            "SELECT * FROM users WHERE name=? AND password=?";
     private final Connection connection;
 
     public JdbcUserRepository(Connection connection) {
@@ -30,7 +30,7 @@ public class JdbcUserRepository implements UserRepository{
 
     @Override
     public boolean validate(String name, String password) {
-        boolean status = false;
+        boolean status;
         try(PreparedStatement preparedStatement = connection.prepareStatement(SELECT_FROM_USERS_WHERE_NAME_PASSWORD)) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, password);
@@ -57,5 +57,10 @@ public class JdbcUserRepository implements UserRepository{
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<User> filterUsersByName(String name, List<User> users) {
+        return users.stream().filter(user -> user.getName().equals(name)).toList();
     }
 }

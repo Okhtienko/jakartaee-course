@@ -1,6 +1,5 @@
 package com.technology.servlet;
 
-import com.technology.model.User;
 import com.technology.service.UserService;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -9,8 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
 
 @WebServlet("/registration")
 public class RegistrationServlet extends HttpServlet {
@@ -23,7 +20,8 @@ public class RegistrationServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         getServletContext().getRequestDispatcher("/registration.jsp").forward(request, response);
     }
 
@@ -31,10 +29,12 @@ public class RegistrationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         final String name = request.getParameter("name");
         final String password = request.getParameter("password");
-        try (PrintWriter out = response.getWriter ()) {
+
+        try {
             userService.addUser(name, password);
-            final List<User> users = userService.findUsers();
-            users.stream().forEach(user -> out.println(user.getName()));
+            getServletContext().getRequestDispatcher("/userRegistered.jsp").forward(request, response);
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
         }
     }
 }

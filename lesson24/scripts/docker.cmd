@@ -1,9 +1,13 @@
 docker run --rm `
     --name tomcat `
-    -p 8080:8080 `
     --network demo_network `
+    -p 8080:8080 `
+    -p 9000:8000 `
+    -e JPDA_ADDRESS="*:8000" `
+    -e JPDA_TRANSPORT=dt_socket `
     -v "C:/Users/mari_/IdeaProjects/jakartaee-course/lesson24/target/lesson24-1.0-SNAPSHOT.war:/usr/local/tomcat/webapps/lesson24.war" `
-    tomcat:9.0.53-jdk17-openjdk
+    tomcat:9.0.53-jdk17-openjdk `
+    /usr/local/tomcat/bin/catalina.sh jpda run
 
 docker run --rm `
     --name demo-postgres `

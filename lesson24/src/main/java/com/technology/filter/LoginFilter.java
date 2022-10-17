@@ -17,7 +17,7 @@ public class LoginFilter implements Filter {
             throws IOException, ServletException {
 
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
-        final Boolean loggedIn = (Boolean) httpRequest.getSession().getAttribute("user");
+        final Boolean loggedIn = (Boolean) httpRequest.getSession().getAttribute("isLoggedIn");
         if ((loggedIn == null) || (!loggedIn)) {
             chain.doFilter(request, response);
         } else {

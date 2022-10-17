@@ -24,9 +24,13 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         final String name = request.getParameter("name");
-        final List<User> users = userService.findUsers();
-        final List<User> listOfUsersByCriteria = userService.filterUsersByQueryParameter(name, users);
-        request.setAttribute("query", listOfUsersByCriteria);
+        try {
+            final List<User> users = userService.filterUsersByQueryParameter(name);
+            request.setAttribute("users", users);
+            getServletContext().getRequestDispatcher("/users.jsp").forward(request, response);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -36,8 +40,7 @@ public class LoginServlet extends HttpServlet {
 
         try {
             if(userService.validate(name, password)) {
-                final User user = new User(name, password);
-                request.getSession().setAttribute("user", user);
+                request.getSession().setAttribute("isLoggedIn", true);
                 final List<User> users = userService.findUsers();
                 request.setAttribute("users", users);
                 getServletContext().getRequestDispatcher("/users.jsp").forward(request, response);
@@ -45,6 +48,5 @@ public class LoginServlet extends HttpServlet {
         } catch (ServletException e) {
             throw new RuntimeException(e);
         }
-        response.sendRedirect("registration");
    }
 }

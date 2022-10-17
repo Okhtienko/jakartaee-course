@@ -11,8 +11,11 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public boolean addUser(String name, String password) {
-         return userRepository.addUser(name, password);
+    public void addUser(String name, String password) {
+        if (userRepository.getUser(name).isPresent()) {
+            throw new RuntimeException("User already exists");
+        }
+        userRepository.addUser(name, password);
     }
 
     public boolean validate(String name, String password) {
@@ -23,7 +26,7 @@ public class UserService {
         return userRepository.findUsers();
     }
 
-    public List<User> filterUsersByQueryParameter(String name, List<User> users) {
-        return userRepository.filterUsersByName(name, users);
+    public List<User> filterUsersByQueryParameter(String parameter) {
+        return userRepository.filterUsersByQueryParameter(parameter);
     }
 }

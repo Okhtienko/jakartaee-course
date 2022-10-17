@@ -1,6 +1,5 @@
-<%@ page import="com.technology.model.User" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.time.LocalDate" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,24 +42,23 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <%List<User> users = (List<User>) request.getAttribute("users");
-                            for (int i = 0; i < users.size(); i++) {%>
-                        <tr>
-                            <td >
-                                <%=i + 1%>
-                            </td>
-                            <td>
-                                <%=users.get(i).getName()%>
-                            </td>
-                            <td>
-                                <%=users.get(i).getPassword()%>
-                            </td>
-                            <td>
-                                <%=LocalDate.now()%>
-                            </td>
-                            <td><span class="mode mode_on">Active</span></td>
-                        </tr>
-                        <%} %>
+                        <c:forEach items="${users}" var="user">
+                            <tr>
+                                <td>
+                                    <c:out value="${user.id}" />
+                                </td>
+                                <td>
+                                    <c:out value="${user.name}" />
+                                </td>
+                                <td>
+                                    <c:out value="${user.password}" />
+                                </td>
+                                <td>
+                                    <f:formatDate value="${user.date}" pattern="dd-MM-YYYY HH:mm:ss" />
+                                </td>
+                                <td><span class="mode mode_on">Active</span></td>
+                            </tr>
+                        </c:forEach>
                         </tbody>
                     </table>
                 </div>

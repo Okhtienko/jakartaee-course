@@ -1,4 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +16,9 @@
     <div class="container">
         <div class="row">
             <h1>Welcome</h1>
-            <p><%=request.getParameter("name")%></p>
+            <p>
+                <c:out value="${param.name}"/>
+            </p>
         </div>
     </div>
 </body>

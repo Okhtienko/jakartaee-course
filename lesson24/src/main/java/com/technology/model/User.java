@@ -1,30 +1,50 @@
 package com.technology.model;
 
-public class User {
-    private String name;
-    private String password;
+import java.io.Serializable;
+import java.util.Date;
 
-    public User() {
-    }
+public class User implements Serializable {
+  private Long id;
+  private String name;
+  private String password;
+  private Date date;
 
-    public User(String name, String password) {
-        this.name = name;
-        this.password = password;
-    }
+  public User(Long id, String name, String password, Date date) {
+    this.id = id;
+    this.name = name;
+    this.password = password;
+    this.date = date;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getPassword() {
-        return password;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public Date getDate() {
+    return date;
+  }
+
+  public void setDate(Date date) {
+    this.date = date;
+  }
 }

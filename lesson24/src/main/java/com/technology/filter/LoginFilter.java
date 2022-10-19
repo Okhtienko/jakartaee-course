@@ -12,16 +12,16 @@ import javax.servlet.http.HttpServletRequest;
 
 @WebFilter(value = "/users.jsp")
 public class LoginFilter implements Filter {
-    @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+  @Override
+  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+      throws IOException, ServletException {
 
-        final HttpServletRequest httpRequest = (HttpServletRequest) request;
-        final Boolean loggedIn = (Boolean) httpRequest.getSession().getAttribute("isLoggedIn");
-        if ((loggedIn == null) || (!loggedIn)) {
-            chain.doFilter(request, response);
-        } else {
-            request.getServletContext().getRequestDispatcher("/registration.jsp").forward(request, response);
-        }
+    final HttpServletRequest httpRequest = (HttpServletRequest) request;
+    final Boolean loggedIn = (Boolean) httpRequest.getSession().getAttribute("isLoggedIn");
+    if (loggedIn == null || !loggedIn) {
+      chain.doFilter(request, response);
+    } else {
+      request.getServletContext().getRequestDispatcher("/registration.jsp").forward(request, response);
     }
+  }
 }

@@ -10,8 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.technology.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 
 @WebServlet("/registration")
+@Slf4j
 public class RegistrationServlet extends HttpServlet {
   private UserService userService;
 
@@ -34,9 +36,10 @@ public class RegistrationServlet extends HttpServlet {
 
     try {
       userService.addUser(name, password);
+      log.info("User does not exist, registering a new user. User[{}]", name);
       getServletContext().getRequestDispatcher("/userRegistered.jsp").forward(request, response);
     } catch (ServletException e) {
-      throw new RuntimeException(e);
+      log.error("Error message", e);
     }
   }
 }

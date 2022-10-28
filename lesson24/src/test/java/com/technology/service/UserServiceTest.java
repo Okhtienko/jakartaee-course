@@ -28,7 +28,6 @@ class UserServiceTest {
   void shouldCreateUserWhenUserNotExist() {
     final String name = "any_name";
     final String password = "any_password";
-    final String role = "any_role";
 
     given(userRepository.getUser(name)).willReturn(Optional.empty());
 
@@ -43,16 +42,12 @@ class UserServiceTest {
   void shouldThrowExceptionWHenUserExists() {
     final String name = "any_name";
     final String password = "any_password";
-    final String role = "any_role";
     final User user = mock(User.class);
-
     given(userRepository.getUser(name)).willReturn(Optional.of(user));
-
     final RuntimeException actual = assertThrows(
         RuntimeException.class, () -> sut.addUser(name, password));
 
     assertThat(actual)
         .hasMessage("User already exists");
-
   }
 }

@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 import com.technology.model.User;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class JdbcUserRepository implements UserRepository {
   private static final String INSERT_INTO_USERS = "INSERT INTO users(name, password) VALUES (?, ?)";
   private static final String SELECT_FROM_USERS = "SELECT * FROM users";
@@ -30,7 +32,7 @@ public class JdbcUserRepository implements UserRepository {
       preparedStatement.setString(2, password);
       preparedStatement.execute();
     } catch (SQLException e) {
-      throw new RuntimeException(e);
+      log.error("Error message.", e);
     }
   }
 
@@ -42,8 +44,9 @@ public class JdbcUserRepository implements UserRepository {
       ResultSet resultSet = preparedStatement.executeQuery();
       return resultSet.next();
     } catch (SQLException e) {
-      throw new RuntimeException(e);
+      log.error("Error message.", e);
     }
+    return false;
   }
 
   @Override
@@ -56,8 +59,9 @@ public class JdbcUserRepository implements UserRepository {
       }
       return users;
     } catch (SQLException e) {
-      throw new RuntimeException(e);
+      log.error("Error message.", e);
     }
+    return new ArrayList<>();
   }
 
   @Override
@@ -70,10 +74,10 @@ public class JdbcUserRepository implements UserRepository {
         return Optional.of(buildUser(resultSet));
       }
 
-      return Optional.empty();
     } catch (SQLException e) {
-      throw new RuntimeException(e);
+      log.error("Error message", e);
     }
+    return Optional.empty();
   }
 
   @Override

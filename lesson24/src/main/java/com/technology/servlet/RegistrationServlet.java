@@ -10,8 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.technology.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 
 @WebServlet("/registration")
+@Slf4j
 public class RegistrationServlet extends HttpServlet {
   private UserService userService;
 
@@ -28,15 +30,17 @@ public class RegistrationServlet extends HttpServlet {
   }
 
   @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
     final String name = request.getParameter("name");
     final String password = request.getParameter("password");
 
-    try {
+    if (!(name.isEmpty() && password.isEmpty())) {
       userService.addUser(name, password);
+      log.info("User does not exist, registering a new user. User[{}]", name);
       getServletContext().getRequestDispatcher("/userRegistered.jsp").forward(request, response);
-    } catch (ServletException e) {
-      throw new RuntimeException(e);
+    } else {
+      log.info("User is already to exist. User[{}]", name);
+      getServletContext().getRequestDispatcher("/accessDenied.jsp").forward(request, response);
     }
   }
 }

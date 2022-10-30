@@ -11,8 +11,10 @@ import javax.servlet.annotation.WebListener;
 import com.technology.repository.JdbcUserRepository;
 import com.technology.repository.UserRepository;
 import com.technology.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 
 @WebListener
+@Slf4j
 public class DependencyInitializationContextListener implements ServletContextListener {
   @Override
   public void contextInitialized(final ServletContextEvent sce) {
@@ -28,7 +30,7 @@ public class DependencyInitializationContextListener implements ServletContextLi
       UserService userService = new UserService(repository);
       sce.getServletContext().setAttribute("userService", userService);
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error("Error message", e);
     }
   }
 

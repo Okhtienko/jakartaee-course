@@ -30,16 +30,17 @@ public class RegistrationServlet extends HttpServlet {
   }
 
   @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
     final String name = request.getParameter("name");
     final String password = request.getParameter("password");
 
-    try {
+    if (!(name.isEmpty() && password.isEmpty())) {
       userService.addUser(name, password);
       log.info("User does not exist, registering a new user. User[{}]", name);
       getServletContext().getRequestDispatcher("/userRegistered.jsp").forward(request, response);
-    } catch (ServletException e) {
-      log.error("Error message", e);
+    } else {
+      log.info("User is already to exist. User[{}]", name);
+      getServletContext().getRequestDispatcher("/accessDenied.jsp").forward(request, response);
     }
   }
 }

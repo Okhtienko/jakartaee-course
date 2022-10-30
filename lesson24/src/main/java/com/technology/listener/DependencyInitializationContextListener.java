@@ -41,6 +41,7 @@ public class DependencyInitializationContextListener implements ServletContextLi
       connection.close();
     } catch (SQLException e) {
       log.error("Error message", e);
+      e.printStackTrace();
     }
   }
 }

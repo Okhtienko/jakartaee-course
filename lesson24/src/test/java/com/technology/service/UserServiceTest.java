@@ -42,7 +42,7 @@ class UserServiceTest {
   void shouldThrowExceptionWHenUserExists() {
     final String name = "any_name";
     final String password = "any_password";
-    final User user = mock(User.class);
+    User user = mock(User.class);
     given(userRepository.getUser(name)).willReturn(Optional.of(user));
     final RuntimeException actual = assertThrows(
         RuntimeException.class, () -> sut.addUser(name, password));

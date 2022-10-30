@@ -40,7 +40,7 @@ class JdbcUserRepositoryTest {
   }
 
   @Test
-  void createUser() {
+  void shouldReturnTheNumberOfFoundUsers() {
     List<User> users = repository.findUsers();
 
     assertThat(users)

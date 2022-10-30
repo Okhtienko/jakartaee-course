@@ -2,14 +2,12 @@ package com.technology.model;
 
 import java.util.Date;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Value;
 
-@Data
-@AllArgsConstructor
+@Value
 public class User {
-  private Long id;
-  private String name;
-  private String password;
-  private Date date;
+  Long id;
+  String name;
+  String password;
+  Date date;
 }

@@ -1,12 +1,12 @@
 package com.technology.twosums;
 
 import org.junit.jupiter.params.ParameterizedTest;
-
-import org.junit.jupiter.params.provider.*;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class TwoSumsTest {
@@ -15,31 +15,17 @@ class TwoSumsTest {
 
   @ParameterizedTest
   @MethodSource("arrayAndIntProvider")
-  void shouldReturnIndicesOfTheTwoNumbers(final int[] incomingNumbers, final int desiredValue) {
+  void shouldReturnIndicesOfTheTwoNumbers(final int[] incomingNumbers, final int desiredValue, final int[] expected) {
     int[] actual = twoSums.calculate(incomingNumbers, desiredValue);
-    assertNotNull(actual);
+    assertArrayEquals(expected, actual);
   }
 
   private static Stream<Arguments> arrayAndIntProvider() {
     return Stream.of(
-        arguments(new int[]{2, 7, 11, 15}, 9),
-        arguments(new int[]{3, 2, 4}, 6),
-        arguments(new int[]{3, 3}, 6)
-    );
-  }
-
-  @ParameterizedTest
-  @MethodSource("nullAndIntProvider")
-  void shouldReturnNullWhenIncomingNumbersNull(final int[] incomingNumbers, final int desiredValue) {
-    int[] actual = twoSums.calculate(incomingNumbers, desiredValue);
-    assertNull(actual);
-  }
-
-  private static Stream<Arguments> nullAndIntProvider() {
-    return Stream.of(
-        arguments(null, 9),
-        arguments(null, 6),
-        arguments(null, 6)
+        arguments(new int[]{2, 7, 11, 15}, 9, new int[]{0, 1}),
+        arguments(new int[]{3, 2, 4}, 6, new int[]{1, 2}),
+        arguments(new int[]{3, 3}, 6, new int[]{0, 1}),
+        arguments(null, 6, null)
     );
   }
 }

@@ -1,6 +1,5 @@
 package com.technology.servlet;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletConfig;
@@ -9,12 +8,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import com.technology.model.User;
 import com.technology.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 
-@WebServlet("/login")
+@WebServlet(urlPatterns = "/login")
 @Slf4j
 public class LoginServlet extends HttpServlet {
   private UserService userService;
@@ -28,13 +26,14 @@ public class LoginServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) {
     final String name = request.getParameter("name");
+
     try {
       final List<User> users = userService.filterUsersByName(name);
-      request.setAttribute("users", users);
       log.info(
-          "Displays a list filtered by name. List users{}",
+          "Displays a list of users filtered by name. List users{}",
           users.stream().map(User::getName).toList()
       );
+      request.setAttribute("users", users);
       getServletContext().getRequestDispatcher("/users.jsp").forward(request, response);
     } catch (Exception e) {
       log.error("Error message", e);
@@ -42,22 +41,26 @@ public class LoginServlet extends HttpServlet {
   }
 
   @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) {
     final String name = request.getParameter("name");
     final String password = request.getParameter("password");
+    final Long signedInUserId = userService.getUserId(name);
 
     try {
       if (userService.validate(name, password)) {
         request.getSession().setAttribute("isLoggedIn", true);
-        final List<User> users = userService.findUsers();
+        request.getSession().setAttribute("signedInUserId", signedInUserId);
+        request.getSession().setAttribute("signedUserName", name);
+
+        final List<User> users = userService.getSuggestedFriendsList(signedInUserId);
         request.setAttribute("users", users);
         log.info(
-            "Displays a list of registered users. List users{}",
+            "Displays a suggested friends list. List users{}",
             users.stream().map(User::getName).toList()
         );
-        getServletContext().getRequestDispatcher("/users.jsp").forward(request, response);
+        request.getServletContext().getRequestDispatcher("/users.jsp").forward(request, response);
       }
-    } catch (ServletException e) {
+    } catch (Exception e) {
       log.error("Error message", e);
     }
   }

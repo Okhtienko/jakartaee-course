@@ -12,10 +12,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styleTables.css">
-    <title>Users</title>
+    <title>Friends</title>
 </head>
 <body>
-
 <div class="container p-30">
     <div class="row">
         <jsp:include page="header.jsp"/>
@@ -45,20 +44,20 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach items="${users}" var="user">
+                        <c:forEach items="${friends}" var="friend">
                             <tr>
                                 <td>
-                                    <c:out value="${user.id}" />
+                                    <c:out value="${friend.id}" />
                                 </td>
                                 <td>
-                                    <c:out value="${user.name}" />
+                                    <c:out value="${friend.name}" />
                                 </td>
                                 <td>
                                     <span class="mode mode_on">Active</span>
                                 </td>
                                 <td>
-                                    <form action="createFriendRequests?requestFriendId=${user.getId()}" method="post">
-                                        <button class="mode mode_on">Add Friend</button>
+                                    <form action="friends?requestFriendId=${friend.getId()}" method="post">
+                                        <button class="mode mode_off">Delete friend</button>
                                     </form>
                                 </td>
                             </tr>

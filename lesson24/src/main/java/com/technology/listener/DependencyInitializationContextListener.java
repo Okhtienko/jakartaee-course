@@ -8,10 +8,17 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.technology.repository.JdbcUserRepository;
 import com.technology.repository.UserRepository;
 import com.technology.service.UserService;
-import lombok.extern.slf4j.Slf4j;
+import com.technology.repository.FriendRequestsRepository;
+import com.technology.service.FriendRequestsService;
+import com.technology.repository.JdbcFriendRequestsRepository;
+import com.technology.repository.FriendRepository;
+import com.technology.service.FriendService;
+import com.technology.repository.JdbcFriendRepository;
 
 @WebListener
 @Slf4j
@@ -26,9 +33,18 @@ public class DependencyInitializationContextListener implements ServletContextLi
     try {
       Class.forName(dbDriver);
       final Connection connection = DriverManager.getConnection(dbUrl, username, password);
-      UserRepository repository = new JdbcUserRepository(connection);
-      UserService userService = new UserService(repository);
+
+      UserRepository userRepository = new JdbcUserRepository(connection);
+      UserService userService = new UserService(userRepository);
       sce.getServletContext().setAttribute("userService", userService);
+
+      FriendRequestsRepository friendRequestsRepository = new JdbcFriendRequestsRepository(connection);
+      FriendRequestsService friendRequestsService = new FriendRequestsService(friendRequestsRepository);
+      sce.getServletContext().setAttribute("friendRequestsService", friendRequestsService);
+
+      FriendRepository friendRepository = new JdbcFriendRepository(connection);
+      FriendService friendService = new FriendService(friendRepository);
+      sce.getServletContext().setAttribute("friendService", friendService);
     } catch (Exception e) {
       log.error("Error message", e);
     }

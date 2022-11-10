@@ -1,6 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,10 +11,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styleTables.css">
-    <title>Users</title>
+    <title>Incoming Requests</title>
 </head>
 <body>
-
 <div class="container p-30">
     <div class="row">
         <jsp:include page="header.jsp"/>
@@ -42,10 +40,11 @@
                             <th style="min-width:150px;">Name</th>
                             <th style="min-width:150px;">Status</th>
                             <th style="min-width:150px;"></th>
+                            <th style="min-width:150px;"></th>
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach items="${users}" var="user">
+                        <c:forEach items="${incomingRequestsList}" var="user">
                             <tr>
                                 <td>
                                     <c:out value="${user.id}" />
@@ -57,8 +56,13 @@
                                     <span class="mode mode_on">Active</span>
                                 </td>
                                 <td>
-                                    <form action="createFriendRequests?requestFriendId=${user.getId()}" method="post">
-                                        <button class="mode mode_on">Add Friend</button>
+                                    <form action="acceptRequests?requestFriendId=${user.getId()}" method="post">
+                                        <button class="mode mode_on">Accept request</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="incomingRequests?requestFriendId=${user.getId()}" method="post">
+                                        <button class="mode mode_off">Reject request</button>
                                     </form>
                                 </td>
                             </tr>

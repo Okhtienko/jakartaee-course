@@ -1,18 +1,17 @@
 package com.technology.servlet;
 
-import java.io.IOException;
+import com.technology.service.UserService;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
+import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 
-import com.technology.service.UserService;
-import lombok.extern.slf4j.Slf4j;
-
-@WebServlet("/registration")
+@WebServlet(urlPatterns = "/registration")
 @Slf4j
 public class RegistrationServlet extends HttpServlet {
   private UserService userService;
@@ -30,17 +29,21 @@ public class RegistrationServlet extends HttpServlet {
   }
 
   @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) {
     final String name = request.getParameter("name");
     final String password = request.getParameter("password");
 
-    if (!(name.isEmpty() && password.isEmpty())) {
-      userService.addUser(name, password);
-      log.info("User does not exist, registering a new user. User[{}]", name);
-      getServletContext().getRequestDispatcher("/userRegistered.jsp").forward(request, response);
-    } else {
-      log.info("User is already to exist. User[{}]", name);
-      getServletContext().getRequestDispatcher("/accessDenied.jsp").forward(request, response);
+    try {
+      if (!(name.isEmpty() && password.isEmpty())) {
+        userService.addUser(name, password);
+        log.info("User does not exist, registering a new user. User[{}]", name);
+        getServletContext().getRequestDispatcher("/userRegistered.jsp").forward(request, response);
+      } else {
+        log.info("User is already to exist. User[{}]", name);
+        getServletContext().getRequestDispatcher("/accessDenied.jsp").forward(request, response);
+      }
+    } catch (Exception e) {
+      log.error("Error message.", e);
     }
   }
 }

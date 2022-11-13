@@ -46,4 +46,5 @@ public class UserService {
   public List<User> getFriendsList(Long signedInUserId) {
     return userRepository.getFriendsList(signedInUserId);
   }
+
 }

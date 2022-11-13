@@ -8,6 +8,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import com.technology.facade.FriendFacade;
 import lombok.extern.slf4j.Slf4j;
 
 import com.technology.repository.JdbcUserRepository;
@@ -45,8 +46,12 @@ public class DependencyInitializationContextListener implements ServletContextLi
       FriendRepository friendRepository = new JdbcFriendRepository(connection);
       FriendService friendService = new FriendService(friendRepository);
       sce.getServletContext().setAttribute("friendService", friendService);
+
+      FriendFacade friendFacade = new FriendFacade(friendService, friendRequestsService);
+      sce.getServletContext().setAttribute("friendFacade", friendFacade);
+
     } catch (Exception e) {
-      log.error("Error message", e);
+      log.error("Initialization error.", e);
     }
   }
 

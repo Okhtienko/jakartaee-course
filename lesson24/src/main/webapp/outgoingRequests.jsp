@@ -19,9 +19,6 @@
   <div class="row">
     <jsp:include page="header.jsp"/>
     <div class="col-md-12 main-datatable">
-      <div>
-        <c:out value="${signedUserName}"/>
-      </div>
       <div class="card_body">
         <div class="row d-flex">
           <div class="col-sm-12 add_flex">

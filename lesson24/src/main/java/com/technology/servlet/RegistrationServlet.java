@@ -39,7 +39,7 @@ public class RegistrationServlet extends HttpServlet {
         log.info("User does not exist, registering a new user. User[{}]", name);
         getServletContext().getRequestDispatcher("/userRegistered.jsp").forward(request, response);
       } else {
-        log.info("User is already to exist. User[{}]", name);
+        log.info("Form fields are empty.");
         getServletContext().getRequestDispatcher("/accessDenied.jsp").forward(request, response);
       }
     } catch (Exception e) {

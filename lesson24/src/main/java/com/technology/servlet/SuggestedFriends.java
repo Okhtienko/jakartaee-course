@@ -12,14 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-@WebServlet("/allUsers")
+@WebServlet("/suggestedFriends")
 @Slf4j
-public class AllUsersServlet extends HttpServlet {
+public class SuggestedFriends extends HttpServlet {
   private UserService userService;
 
   @Override
   public void init(ServletConfig config) throws ServletException {
-    super.init(config);
     userService = (UserService) config.getServletContext().getAttribute("userService");
   }
 
@@ -28,13 +27,10 @@ public class AllUsersServlet extends HttpServlet {
     final Long signedInUserId = (Long) request.getSession().getAttribute("signedInUserId");
 
     try {
-      final List<User> users = userService.getSuggestedFriendsList(signedInUserId);
-      request.setAttribute("users", users);
-      log.info(
-          "Displays a list of registered users. List users{}",
-          users.stream().map(User::getName).toList()
-      );
-      request.getServletContext().getRequestDispatcher("/users.jsp").forward(request, response);
+      final List<User> suggestedFriends = userService.getSuggestedFriendsList(signedInUserId);
+      log.info("Displays a number of suggested friends. Number of suggested friends[{}]", suggestedFriends.size());
+      request.setAttribute("suggestedFriends", suggestedFriends);
+      request.getServletContext().getRequestDispatcher("/suggestedFriends.jsp").forward(request, response);
     } catch (Exception e) {
       log.error("Error message.", e);
     }

@@ -19,7 +19,6 @@ public class LoginServlet extends HttpServlet {
 
   @Override
   public void init(ServletConfig config) throws ServletException {
-    super.init(config);
     userService = (UserService) config.getServletContext().getAttribute("userService");
   }
 
@@ -28,15 +27,15 @@ public class LoginServlet extends HttpServlet {
     final String name = request.getParameter("name");
 
     try {
-      final List<User> users = userService.filterUsersByName(name);
+      final List<User> suggestedFriends = userService.filterUsersByName(name);
       log.info(
-          "Displays a list of users filtered by name. List users{}",
-          users.stream().map(User::getName).toList()
+          "Displays a number of suggested friends filtered by name. Number of suggested friends[{}]",
+          suggestedFriends.size()
       );
-      request.setAttribute("users", users);
-      getServletContext().getRequestDispatcher("/users.jsp").forward(request, response);
+      request.setAttribute("suggestedFriends", suggestedFriends);
+      getServletContext().getRequestDispatcher("/suggestedFriends.jsp").forward(request, response);
     } catch (Exception e) {
-      log.error("Error message", e);
+      log.error("Error message.", e);
     }
   }
 
@@ -48,20 +47,16 @@ public class LoginServlet extends HttpServlet {
 
     try {
       if (userService.validate(name, password)) {
-        request.getSession().setAttribute("isLoggedIn", true);
         request.getSession().setAttribute("signedInUserId", signedInUserId);
         request.getSession().setAttribute("signedUserName", name);
 
-        final List<User> users = userService.getSuggestedFriendsList(signedInUserId);
-        request.setAttribute("users", users);
-        log.info(
-            "Displays a suggested friends list. List users{}",
-            users.stream().map(User::getName).toList()
-        );
-        request.getServletContext().getRequestDispatcher("/users.jsp").forward(request, response);
+        final List<User> suggestedFriends = userService.getSuggestedFriendsList(signedInUserId);
+        log.info("Displays a number of suggested friends. Number of suggested friends[{}]", suggestedFriends.size());
+        request.setAttribute("suggestedFriends", suggestedFriends);
+        request.getServletContext().getRequestDispatcher("/suggestedFriends.jsp").forward(request, response);
       }
     } catch (Exception e) {
-      log.error("Error message", e);
+      log.error("Error message.", e);
     }
   }
 }

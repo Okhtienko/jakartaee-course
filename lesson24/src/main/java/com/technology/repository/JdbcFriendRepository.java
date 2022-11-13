@@ -9,7 +9,7 @@ import java.sql.SQLException;
 @Slf4j
 public class JdbcFriendRepository implements FriendRepository {
   private static final String ADD_FRIEND = "INSERT INTO friends(first_friend_id, second_friend_id) VALUES (?, ?)";
-  private static final String DELETE_FRIEND = "DELETE FROM friends WHERE second_friend_id=?";
+  private static final String DELETE_FRIEND = "DELETE FROM friends WHERE first_friend_id=? AND second_friend_id=?";
   private final Connection connection;
 
   public JdbcFriendRepository(Connection connection) {
@@ -23,17 +23,24 @@ public class JdbcFriendRepository implements FriendRepository {
       statement.setLong(2, recipientId);
       statement.execute();
     } catch (SQLException e) {
-      log.error("Error message.", e);
+      log.error(
+          "Record not added to db. SenderId[{}], recipientId[{}]. SQL exception{}",
+          senderId, recipientId, e
+      );
     }
   }
 
   @Override
-  public void deleteFriend(Long friendId) {
+  public void deleteFriend(Long signedInUserId, Long friendId) {
     try (PreparedStatement statement = connection.prepareStatement(DELETE_FRIEND)) {
-      statement.setLong(1, friendId);
+      statement.setLong(1, signedInUserId);
+      statement.setLong(2, friendId);
       statement.executeUpdate();
     } catch (SQLException e) {
-      log.error("Error message.", e);
+      log.error(
+          "Record not removed from db. SignedInUserId[{}], friendId[{}].  SQL exception{}",
+          signedInUserId,  friendId, e
+      );
     }
   }
 }

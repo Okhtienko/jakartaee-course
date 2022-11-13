@@ -13,7 +13,7 @@ public class FriendService {
     friendRepository.addFriend(senderId, recipientId);
   }
 
-  public void deleteFriend(Long friendId) {
-    friendRepository.deleteFriend(friendId);
+  public void deleteFriend(Long signedInUserId, Long friendId) {
+    friendRepository.deleteFriend(signedInUserId, friendId);
   }
 }

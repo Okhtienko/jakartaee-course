@@ -21,7 +21,6 @@ public class IncomingRequestsServlet extends HttpServlet {
 
   @Override
   public void init(ServletConfig config) throws ServletException {
-    super.init(config);
     userService = (UserService) config.getServletContext().getAttribute("userService");
     friendRequestsService = (FriendRequestsService) config.getServletContext().getAttribute("friendRequestsService");
   }
@@ -33,13 +32,13 @@ public class IncomingRequestsServlet extends HttpServlet {
     try {
       List<User> incomingRequestsList = userService.getAllIncomingRequestList(recipientId);
       log.info(
-          "Displays a list incoming requests in friends. List users{}",
-          incomingRequestsList.stream().map(User::getName).toList()
+          "Displays a number of incoming requests in friends. Number of incoming requests[{}]",
+          incomingRequestsList.size()
       );
       request.getServletContext().setAttribute("incomingRequestsList", incomingRequestsList);
       request.getRequestDispatcher("/incomingRequests.jsp").forward(request, response);
     } catch (Exception e) {
-      log.error("Error message", e);
+      log.error("Error message.", e);
     }
   }
 
@@ -50,10 +49,10 @@ public class IncomingRequestsServlet extends HttpServlet {
 
     try {
       friendRequestsService.deleteFriendRequest(senderId, recipientId);
-      log.info("Delete friend request. senderId=[{}]", senderId);
+      log.info("Delete friend request. SenderId[{}]", senderId);
       response.sendRedirect("./incomingRequests");
     } catch (Exception e) {
-      log.error("Error message", e);
+      log.error("Error message.", e);
     }
   }
 }

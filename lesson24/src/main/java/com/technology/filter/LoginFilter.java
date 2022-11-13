@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebFilter(urlPatterns = "/allowedPaths")
+@WebFilter("/*")
 public class LoginFilter implements Filter {
   private Set<String> allowedPaths;
 
@@ -27,14 +27,14 @@ public class LoginFilter implements Filter {
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
 
-    HttpServletRequest httpRequest = (HttpServletRequest) request;
-    HttpServletResponse httpResponse = (HttpServletResponse) response;
+    final HttpServletRequest httpRequest = (HttpServletRequest) request;
+    final HttpServletResponse httpResponse = (HttpServletResponse) response;
     HttpSession session = httpRequest.getSession(false);
-    String path = httpRequest
+    final String path = httpRequest
         .getRequestURI()
         .substring(httpRequest.getContextPath().length()).replaceAll("/+$", "");
 
-    boolean loggedIn = session != null && session.getAttribute("isLoggedIn") != null;
+    boolean loggedIn = session != null && session.getAttribute("signedInUserId") != null;
     boolean allowedPath = allowedPaths.contains(path);
 
     if (loggedIn || allowedPath) {

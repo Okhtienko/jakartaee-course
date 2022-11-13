@@ -10,14 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
-@WebServlet(urlPatterns = "/createFriendRequests")
+@WebServlet(urlPatterns = "/creatingFriendRequests")
 @Slf4j
 public class CreateFriendRequestsServlet extends HttpServlet {
   private FriendRequestsService friendRequestsService;
 
   @Override
   public void init(ServletConfig config) throws ServletException {
-    super.init(config);
     friendRequestsService = (FriendRequestsService) config.getServletContext().getAttribute("friendRequestsService");
   }
 
@@ -29,13 +28,13 @@ public class CreateFriendRequestsServlet extends HttpServlet {
     try {
       if (!friendRequestsService.isRequestExists(senderId, recipientId)) {
         friendRequestsService.createFriendRequest(senderId, recipientId);
-        log.info("Request not exists. Create new request senderId=[{}] recipientId=[{}]", senderId, recipientId);
+        log.info("Request not exists. Create new request senderId[{}], recipientId[{}]", senderId, recipientId);
       } else {
-        log.info("Request is exists. recipientId=[{}]", recipientId);
+        log.info("Request is exists. RecipientId[{}]", recipientId);
       }
-      response.sendRedirect("./allUsers");
+      response.sendRedirect("./suggestedFriends");
     } catch (Exception e) {
-      log.error("Error message", e);
+      log.error("Error message.", e);
     }
   }
 }

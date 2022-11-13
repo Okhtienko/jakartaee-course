@@ -27,7 +27,7 @@ public class JdbcUserRepository implements UserRepository {
       "SELECT * FROM users u INNER JOIN requests r ON u.id = r.sender_id WHERE r.recipient_id=?";
   private static final String GET_ALL_FRIENDS =
       "SELECT * FROM users u JOIN friends f on u.id = f.second_friend_id WHERE f.first_friend_id=?";
-  private final Connection connection;
+  public final Connection connection;
 
   public JdbcUserRepository(Connection connection) {
     this.connection = connection;
@@ -40,7 +40,7 @@ public class JdbcUserRepository implements UserRepository {
       statement.setString(2, password);
       statement.execute();
     } catch (SQLException e) {
-      log.error("Error message.", e);
+      log.error("User not added to db. Name[{}], password[{}]. SQL exception{}", name, password, e);
     }
   }
 
@@ -54,7 +54,7 @@ public class JdbcUserRepository implements UserRepository {
       return resultSet.next();
 
     } catch (SQLException e) {
-      log.error("Error message.", e);
+      log.error("Validation error. Name[{}], password[{}]. SQL exception{}", name, password, e);
     }
     return false;
   }
@@ -72,7 +72,7 @@ public class JdbcUserRepository implements UserRepository {
       return users;
 
     } catch (SQLException e) {
-      log.error("Error message.", e);
+      log.error("SQL exception.", e);
     }
     return new ArrayList<>();
   }
@@ -88,7 +88,7 @@ public class JdbcUserRepository implements UserRepository {
       }
 
     } catch (SQLException e) {
-      log.error("Error message", e);
+      log.error("No user data received. Name[{}]. SQL exception{}", name, e);
     }
     return Optional.empty();
   }
@@ -110,7 +110,7 @@ public class JdbcUserRepository implements UserRepository {
       }
 
     } catch (SQLException e) {
-      log.error("Error", e);
+      log.error("User ID not received. Name[{}]. SQL exception{}", name, e);
     }
     return Optional.empty();
   }
@@ -130,7 +130,7 @@ public class JdbcUserRepository implements UserRepository {
       return users;
 
     } catch (SQLException e) {
-      log.error("Error message.", e);
+      log.error("List of suggested friends not received. SignedInUserId[{}]. SQL exception{}", signedInUserId, e);
     }
     return new ArrayList<>();
   }
@@ -149,7 +149,7 @@ public class JdbcUserRepository implements UserRepository {
       return users;
 
     } catch (SQLException e) {
-      log.error("Error message.", e);
+      log.error("The list of outgoing requests has not been received. SenderId[{}]. SQL exception{}", senderId, e);
     }
     return new ArrayList<>();
   }
@@ -168,7 +168,10 @@ public class JdbcUserRepository implements UserRepository {
       return users;
 
     } catch (SQLException e) {
-      log.error("Error message.", e);
+      log.error(
+          "The list of incoming requests has not been received.  RecipientId[{}]. SQL exception{}",
+          recipientId, e
+      );
     }
     return new ArrayList<>();
   }
@@ -187,7 +190,7 @@ public class JdbcUserRepository implements UserRepository {
       return users;
 
     } catch (SQLException e) {
-      log.error("Error message.", e);
+      log.error("Friends list not received. SignedInUserI[{}]. SQL exception{}", signedInUserId, e);
     }
     return new ArrayList<>();
   }

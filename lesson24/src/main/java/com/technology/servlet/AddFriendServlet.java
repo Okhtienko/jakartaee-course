@@ -1,7 +1,6 @@
 package com.technology.servlet;
 
-import com.technology.service.FriendRequestsService;
-import com.technology.service.FriendService;
+import com.technology.facade.FriendFacade;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletConfig;
@@ -11,17 +10,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(urlPatterns = "/acceptRequests")
+@WebServlet(urlPatterns = "/acceptingRequests")
 @Slf4j
 public class AddFriendServlet extends HttpServlet {
-  private FriendService friendService;
-  private FriendRequestsService friendRequestsService;
+
+  private FriendFacade friendFacade;
 
   @Override
   public void init(ServletConfig config) throws ServletException {
-    super.init(config);
-    friendService = (FriendService) config.getServletContext().getAttribute("friendService");
-    friendRequestsService = (FriendRequestsService) config.getServletContext().getAttribute("friendRequestsService");
+    friendFacade = (FriendFacade) config.getServletContext().getAttribute("friendFacade");
   }
 
   @Override
@@ -30,13 +27,10 @@ public class AddFriendServlet extends HttpServlet {
     final Long recipientId = Long.parseLong(request.getParameter("requestFriendId"));
 
     try {
-      friendService.addFriend(senderId, recipientId);
-      log.info("Create new friend. recipientId=[{}]", recipientId);
-      friendRequestsService.deleteFriendRequest(recipientId, senderId);
-      log.info("Delete friend request. recipientId=[{}]", recipientId);
+      friendFacade.createFriend(senderId, recipientId);
       response.sendRedirect("./incomingRequests");
     } catch (Exception e) {
-      log.error("Error message", e);
+      log.error("Error message.", e);
     }
   }
 }

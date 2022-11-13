@@ -25,7 +25,10 @@ public class JdbcFriendRequestsRepository implements FriendRequestsRepository {
       statement.setLong(2, recipientId);
       statement.execute();
     } catch (SQLException e) {
-      log.error("Error message.", e);
+      log.error(
+          "Request not added to db. SenderId[{}], recipientId[{}]. SQL exception{}",
+          senderId, recipientId, e
+      );
     }
   }
 
@@ -36,7 +39,10 @@ public class JdbcFriendRequestsRepository implements FriendRequestsRepository {
       statement.setLong(2, recipientId);
       statement.executeUpdate();
     } catch (SQLException e) {
-      log.error("Error message.", e);
+      log.error(
+          "Request not removed from db. SenderId[{}], recipientId[{}]. SQL exception{}",
+          senderId, recipientId, e
+      );
     }
   }
 
@@ -50,7 +56,10 @@ public class JdbcFriendRequestsRepository implements FriendRequestsRepository {
       return resultSet.next();
 
     } catch (SQLException e) {
-      log.error("Error message.", e);
+      log.error(
+          "Request not found. SenderId[{}], recipientId[{}]. SQL exception{}",
+          senderId, recipientId, e
+      );
     }
     return false;
   }

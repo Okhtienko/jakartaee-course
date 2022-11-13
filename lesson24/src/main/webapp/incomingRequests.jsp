@@ -18,9 +18,6 @@
     <div class="row">
         <jsp:include page="header.jsp"/>
         <div class="col-md-12 main-datatable">
-            <div>
-                <c:out value="${signedUserName}"/>
-            </div>
             <div class="card_body">
                 <div class="row d-flex">
                     <div class="col-sm-12 add_flex">
@@ -56,7 +53,7 @@
                                     <span class="mode mode_on">Active</span>
                                 </td>
                                 <td>
-                                    <form action="acceptRequests?requestFriendId=${user.getId()}" method="post">
+                                    <form action="acceptingRequests?requestFriendId=${user.getId()}" method="post">
                                         <button class="mode mode_on">Accept request</button>
                                     </form>
                                 </td>

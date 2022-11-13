@@ -21,7 +21,6 @@ public class FriendServlet extends HttpServlet {
 
   @Override
   public void init(ServletConfig config) throws ServletException {
-    super.init(config);
     userService = (UserService) config.getServletContext().getAttribute("userService");
     friendService = (FriendService) config.getServletContext().getAttribute("friendService");
   }
@@ -32,24 +31,22 @@ public class FriendServlet extends HttpServlet {
 
     try {
       List<User> friends = userService.getFriendsList(signedInUser);
-      log.info(
-          "Displays a list friends. List users{}",
-          friends.stream().map(User::getName).toList()
-      );
+      log.info("Displays a number of friends. Number of friends[{}]", friends.size());
       request.getServletContext().setAttribute("friends", friends);
       request.getRequestDispatcher("/friends.jsp").forward(request, response);
     } catch (Exception e) {
-      log.error("Error message", e);
+      log.error("Error message.", e);
     }
   }
 
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    final Long signedInUserId = (Long) request.getSession().getAttribute("signedInUserId");
     final Long friendId = Long.parseLong(request.getParameter("requestFriendId"));
 
     try {
-      friendService.deleteFriend(friendId);
-      log.info("Delete friend. friendId=[{}]", friendId);
+      friendService.deleteFriend(signedInUserId, friendId);
+      log.info("Delete friend. FriendId[{}]", friendId);
       response.sendRedirect("./friends");
     } catch (Exception e) {
       log.error("Error message.", e);

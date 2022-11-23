@@ -25,4 +25,5 @@ public interface UserRepository {
   List<User> getAllIncomingRequestList(Long recipientId);
 
   List<User> getFriendsList(Long signedInUserId);
+
 }

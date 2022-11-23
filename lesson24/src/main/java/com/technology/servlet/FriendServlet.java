@@ -21,6 +21,7 @@ public class FriendServlet extends HttpServlet {
 
   @Override
   public void init(ServletConfig config) throws ServletException {
+    super.init(config);
     userService = (UserService) config.getServletContext().getAttribute("userService");
     friendService = (FriendService) config.getServletContext().getAttribute("friendService");
   }

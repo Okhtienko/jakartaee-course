@@ -26,8 +26,9 @@ public class JdbcUserRepository implements UserRepository {
   private static final String GET_ALL_INCOMING_REQUESTS =
       "SELECT * FROM users u INNER JOIN requests r ON u.id = r.sender_id WHERE r.recipient_id=?";
   private static final String GET_ALL_FRIENDS =
-      "SELECT * FROM users u JOIN friends f on u.id = f.second_friend_id WHERE f.first_friend_id=?";
-  public final Connection connection;
+      "SELECT * FROM users u JOIN friends f on u.id = f.second_friend_id WHERE f.first_friend_id=? " +
+          "UNION SELECT * FROM users u JOIN friends f on u.id = f.first_friend_id WHERE f.second_friend_id=?";
+  private final Connection connection;
 
   public JdbcUserRepository(Connection connection) {
     this.connection = connection;
@@ -180,6 +181,7 @@ public class JdbcUserRepository implements UserRepository {
   public List<User> getFriendsList(Long signedInUserId) {
     try (PreparedStatement statement = connection.prepareStatement(GET_ALL_FRIENDS)) {
       statement.setLong(1, signedInUserId);
+      statement.setLong(2, signedInUserId);
       ResultSet resultSet = statement.executeQuery();
       final List<User> users = new ArrayList<>();
 

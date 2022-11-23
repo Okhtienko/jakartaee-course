@@ -13,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,20 +22,6 @@ class UserServiceTest {
 
   @InjectMocks
   private UserService sut;
-
-  @Test
-  void shouldCreateUserWhenUserNotExist() {
-    final String name = "any_name";
-    final String password = "any_password";
-
-    given(userRepository.getUser(name)).willReturn(Optional.empty());
-
-    sut.addUser(name, password);
-
-    then(userRepository)
-        .should()
-        .addUser(name, password);
-  }
 
   @Test
   void shouldThrowExceptionWHenUserExists() {

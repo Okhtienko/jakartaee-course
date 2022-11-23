@@ -9,6 +9,8 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import com.technology.facade.FriendFacade;
+import com.technology.hashing.BcryptHashingPasswordRepository;
+import com.technology.hashing.HashingPasswordRepository;
 import lombok.extern.slf4j.Slf4j;
 
 import com.technology.repository.JdbcUserRepository;
@@ -35,8 +37,9 @@ public class DependencyInitializationContextListener implements ServletContextLi
       Class.forName(dbDriver);
       final Connection connection = DriverManager.getConnection(dbUrl, username, password);
 
+      HashingPasswordRepository hashingPasswordRepository = new BcryptHashingPasswordRepository(12);
       UserRepository userRepository = new JdbcUserRepository(connection);
-      UserService userService = new UserService(userRepository);
+      UserService userService = new UserService(userRepository, hashingPasswordRepository);
       sce.getServletContext().setAttribute("userService", userService);
 
       FriendRequestsRepository friendRequestsRepository = new JdbcFriendRequestsRepository(connection);

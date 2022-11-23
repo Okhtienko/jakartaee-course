@@ -18,6 +18,7 @@ public class AddFriendServlet extends HttpServlet {
 
   @Override
   public void init(ServletConfig config) throws ServletException {
+    super.init(config);
     friendFacade = (FriendFacade) config.getServletContext().getAttribute("friendFacade");
   }
 

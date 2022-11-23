@@ -9,7 +9,8 @@ import java.sql.SQLException;
 @Slf4j
 public class JdbcFriendRepository implements FriendRepository {
   private static final String ADD_FRIEND = "INSERT INTO friends(first_friend_id, second_friend_id) VALUES (?, ?)";
-  private static final String DELETE_FRIEND = "DELETE FROM friends WHERE first_friend_id=? AND second_friend_id=?";
+  private static final String DELETE_FRIEND = "DELETE FROM friends " +
+      "WHERE (first_friend_id=? AND second_friend_id=?) OR (second_friend_id=? AND first_friend_id=?)";
   private final Connection connection;
 
   public JdbcFriendRepository(Connection connection) {
@@ -35,6 +36,8 @@ public class JdbcFriendRepository implements FriendRepository {
     try (PreparedStatement statement = connection.prepareStatement(DELETE_FRIEND)) {
       statement.setLong(1, signedInUserId);
       statement.setLong(2, friendId);
+      statement.setLong(3, signedInUserId);
+      statement.setLong(4, friendId);
       statement.executeUpdate();
     } catch (SQLException e) {
       log.error(

@@ -10,14 +10,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.14/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,800&display=swap"
-          rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,800&display=swap">
     <link rel="stylesheet" href="css/styleTables.css">
-    <title>Users</title>
+    <title>Friends</title>
 </head>
 <body>
 <div class="container p-30">
     <div class="row">
+        <jsp:include page="header.jsp"/>
         <div class="col-md-12 main-datatable">
             <div class="card_body">
                 <div class="row d-flex">
@@ -36,27 +36,27 @@
                         <tr>
                             <th style="min-width:50px;">ID</th>
                             <th style="min-width:150px;">Name</th>
-                            <th style="min-width:150px;">Password</th>
-                            <th style="min-width:100px;">Date</th>
                             <th style="min-width:150px;">Status</th>
+                            <th style="min-width:150px;"></th>
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach items="${users}" var="user">
+                        <c:forEach items="${friends}" var="friend">
                             <tr>
                                 <td>
-                                    <c:out value="${user.id}" />
+                                    <c:out value="${friend.id}" />
                                 </td>
                                 <td>
-                                    <c:out value="${user.name}" />
+                                    <c:out value="${friend.name}" />
                                 </td>
                                 <td>
-                                    <c:out value="${user.password}" />
+                                    <span class="mode mode_on">Active</span>
                                 </td>
                                 <td>
-                                    <f:formatDate value="${user.date}" pattern="dd-MM-YYYY HH:mm:ss" />
+                                    <form action="friends?requestFriendId=${friend.getId()}" method="post">
+                                        <button class="mode mode_off">Delete friend</button>
+                                    </form>
                                 </td>
-                                <td><span class="mode mode_on">Active</span></td>
                             </tr>
                         </c:forEach>
                         </tbody>

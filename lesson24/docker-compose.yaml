@@ -20,7 +20,6 @@ services:
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "social_network"
     ports:
-      - "15432:5432"
-    volumes:
-      - "C:/Users/mari_/IdeaProjects/jakartaee-course/lesson24/dev-env/postgres/init.sql:/docker-entrypoint-initdb.d/1-init.sql"
+      - "35432:5432"

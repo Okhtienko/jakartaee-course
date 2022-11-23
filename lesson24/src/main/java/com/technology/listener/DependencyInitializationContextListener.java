@@ -8,10 +8,20 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import com.technology.facade.FriendFacade;
+import com.technology.hashing.BcryptHashingPasswordRepository;
+import com.technology.hashing.HashingPasswordRepository;
+import lombok.extern.slf4j.Slf4j;
+
 import com.technology.repository.JdbcUserRepository;
 import com.technology.repository.UserRepository;
 import com.technology.service.UserService;
-import lombok.extern.slf4j.Slf4j;
+import com.technology.repository.FriendRequestsRepository;
+import com.technology.service.FriendRequestsService;
+import com.technology.repository.JdbcFriendRequestsRepository;
+import com.technology.repository.FriendRepository;
+import com.technology.service.FriendService;
+import com.technology.repository.JdbcFriendRepository;
 
 @WebListener
 @Slf4j
@@ -26,11 +36,25 @@ public class DependencyInitializationContextListener implements ServletContextLi
     try {
       Class.forName(dbDriver);
       final Connection connection = DriverManager.getConnection(dbUrl, username, password);
-      UserRepository repository = new JdbcUserRepository(connection);
-      UserService userService = new UserService(repository);
+
+      HashingPasswordRepository hashingPasswordRepository = new BcryptHashingPasswordRepository(12);
+      UserRepository userRepository = new JdbcUserRepository(connection);
+      UserService userService = new UserService(userRepository, hashingPasswordRepository);
       sce.getServletContext().setAttribute("userService", userService);
+
+      FriendRequestsRepository friendRequestsRepository = new JdbcFriendRequestsRepository(connection);
+      FriendRequestsService friendRequestsService = new FriendRequestsService(friendRequestsRepository);
+      sce.getServletContext().setAttribute("friendRequestsService", friendRequestsService);
+
+      FriendRepository friendRepository = new JdbcFriendRepository(connection);
+      FriendService friendService = new FriendService(friendRepository);
+      sce.getServletContext().setAttribute("friendService", friendService);
+
+      FriendFacade friendFacade = new FriendFacade(friendService, friendRequestsService);
+      sce.getServletContext().setAttribute("friendFacade", friendFacade);
+
     } catch (Exception e) {
-      log.error("Error message", e);
+      log.error("Initialization error.", e);
     }
   }
 
